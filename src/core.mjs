@@ -27,6 +27,11 @@ export const TIER_PRIORITY = { GREEN: 1, "SEMI-AUTOMATIC": 2, SEMI: 2, YELLOW: 3
 export const SENSITIVE_SELECTOR_OR_LABEL =
   /pass|pwd|secret|token|key|cvv|cvc|cc-|card|tarjeta|carte|pin|otp|2fa|ssn|auth|code|codigo/i;
 
+export const SENSITIVE_VALUE_RE =
+  /(?:\bsk-(?:live|test|proj|ant)-[A-Za-z0-9_-]{8,}|\bsk-[A-Za-z0-9]{16,}|\bAIza[0-9A-Za-z_-]{30,}|\bgh[pousr]_[A-Za-z0-9]{20,}|\bAKIA[0-9A-Z]{16}\b|\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}|(?:\b\d[ -]*?){13,19}\b)/;
+
+export const DANGEROUS_HREF_RE = /^\s*(?:javascript|data|vbscript):/i;
+
 // Word-boundary FORBIDDEN committing verbs (EN / FR / ES), evaluated on normalizeText() output
 export const FORBIDDEN_WORDS = [
   "envoyer", "enviar", "soumettre", "transmettre", "submit", "send",
@@ -57,10 +62,11 @@ export const FORBIDDEN_RE = new RegExp(
 );
 
 /**
- * Unicode NFD normalization + diacritics removal — immune to macOS NFD vs Linux NFC.
+ * Unicode NFD normalization + diacritics & zero-width char removal — immune to macOS NFD vs Linux NFC and zero-width splitting.
  */
 export function normalizeText(str) {
   return String(str || "")
+    .replace(/[\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF]/g, "")
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
@@ -73,6 +79,7 @@ export function normalizeText(str) {
  */
 export function isForbiddenLabel(label, meta = {}) {
   if (meta && meta.isSubmit) return true;
+  if (meta && meta.href && DANGEROUS_HREF_RE.test(String(meta.href))) return true;
   const norm = normalizeText(label);
   if (norm && FORBIDDEN_RE.test(norm)) return true;
   if (meta && meta.href && FORBIDDEN_RE.test(normalizeText(meta.href))) return true;
@@ -80,17 +87,19 @@ export function isForbiddenLabel(label, meta = {}) {
 }
 
 /**
- * Proactive secret redaction driven by selector, label, or DOM password type.
+ * Proactive secret redaction driven by selector, label, DOM password type, or secret value pattern.
  */
 export function redactFillValue(selector, label, value, res = {}) {
+  const rawVal = String(value ?? "");
   if (
     (res && res.isPassword) ||
     SENSITIVE_SELECTOR_OR_LABEL.test(String(selector || "")) ||
-    SENSITIVE_SELECTOR_OR_LABEL.test(String(label || ""))
+    SENSITIVE_SELECTOR_OR_LABEL.test(String(label || "")) ||
+    SENSITIVE_VALUE_RE.test(rawVal)
   ) {
     return "••• (sensitive — never logged)";
   }
-  return String(value ?? "").slice(0, 80);
+  return rawVal.slice(0, 80);
 }
 
 /**

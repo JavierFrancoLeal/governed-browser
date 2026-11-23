@@ -19,6 +19,13 @@ import {
   computeKpis,
   formatAccountabilityReport,
 } from "../src/core.mjs";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const CLI = join(__dirname, "..", "src", "cli.mjs");
+const MCP = join(__dirname, "..", "src", "mcp-server.mjs");
 
 test("1. normalizeText strips diacritics across EN/FR/ES (NFD immune)", () => {
   assert.equal(normalizeText("  Déconnecter / Réinitialiser  "), "deconnecter / reinitialiser");
@@ -127,4 +134,29 @@ test("7. computeKpis and formatAccountabilityReport calculate autonomy ratio and
   assert.match(report, /Automatic actions — for you to verify:/);
   assert.match(report, /Brakes applied \(RED — the guide stopped, hand to the human\):/);
   assert.match(report, /🛑 click #submit \("Envoyer"\)/);
+});
+
+test("8. Hardening: --flag=value CLI parsing, zero-width obfuscation, dangerous hrefs, value-driven secret redaction, and MCP null guard", () => {
+  // 1) --label=Send must be BRAKED (exit 2), never silently ignored
+  const eqRun = spawnSync(process.execPath, [CLI, "check", "--label=Send", "--selector=#send-btn"], { encoding: "utf8" });
+  assert.equal(eqRun.status, 2);
+  assert.equal(JSON.parse(eqRun.stdout).status, "BRAKED");
+
+  // 2) Zero-width split obfuscation ("Pa\u200Byer") and javascript: URI must be BRAKED
+  assert.equal(isForbiddenLabel("Pa\u200Byer maintenant"), true);
+  assert.equal(isForbiddenLabel("Open link", { href: "javascript:fetch('https://evil.tld')" }), true);
+
+  // 3) Value-driven redaction catches API keys/JWTs/cards even in generic fields
+  assert.equal(redactFillValue("#bio", "Bio", "sk-proj-1234567890abcdefgh"), "••• (sensitive — never logged)");
+  assert.equal(redactFillValue("#notes", "Notes", "AIzaSyA123456789012345678901234567890"), "••• (sensitive — never logged)");
+
+  // 4) MCP server survives null / non-object JSON payload without crashing
+  const mcpRun = spawnSync(process.execPath, [MCP], {
+    input: 'null\n{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}\n',
+    encoding: "utf8",
+  });
+  assert.equal(mcpRun.status, 0);
+  const lines = mcpRun.stdout.trim().split("\n").map((l) => JSON.parse(l));
+  assert.equal(lines[0].error.code, -32600);
+  assert.equal(lines[1].result.serverInfo.version, "1.0.1");
 });

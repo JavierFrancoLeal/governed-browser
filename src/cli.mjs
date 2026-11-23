@@ -25,18 +25,34 @@ import {
 const DEFAULT_AUDIT = process.env.COCKPIT_AUDIT || join(homedir(), ".governed-browser", "audit.jsonl");
 const DEFAULT_TIERS = process.env.COCKPIT_TIERS || join(homedir(), ".governed-browser", "tiers.md");
 
+function parseBool(val) {
+  if (typeof val === "boolean") return val;
+  if (typeof val === "string") {
+    const lower = val.trim().toLowerCase();
+    if (lower === "false" || lower === "0" || lower === "no") return false;
+    if (lower === "true" || lower === "1" || lower === "yes") return true;
+  }
+  return Boolean(val);
+}
+
 function parseArgs(argv) {
   const args = { _: [] };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a.startsWith("--")) {
-      const key = a.slice(2);
-      const next = argv[i + 1];
-      if (!next || next.startsWith("--")) {
-        args[key] = true;
+      const eqIdx = a.indexOf("=");
+      if (eqIdx !== -1) {
+        const key = a.slice(2, eqIdx);
+        args[key] = a.slice(eqIdx + 1);
       } else {
-        args[key] = next;
-        i++;
+        const key = a.slice(2);
+        const next = argv[i + 1];
+        if (!next || next.startsWith("--")) {
+          args[key] = true;
+        } else {
+          args[key] = next;
+          i++;
+        }
       }
     } else {
       args._.push(a);
@@ -67,11 +83,15 @@ function main() {
   const auditFile = resolve(String(args.audit || DEFAULT_AUDIT));
   const tiersFile = resolve(String(args.tiers || DEFAULT_TIERS));
 
-  if (cmd === "check") {
-    const label = String(args.label || "");
+  if (cmd === "check" || cmd === "check-click") {
+    const label = String(args.label ?? "");
     const selector = String(args.selector || "button");
-    const isSubmit = Boolean(args.submit);
+    const isSubmit = parseBool(args.submit);
     const href = String(args.href || "");
+    if (!label.trim() && !args.selector && !href.trim() && !isSubmit) {
+      console.error("Error: check requires at least --label, --selector, --href, or --submit.");
+      process.exit(1);
+    }
     const rules = loadTiersFromDisk(tiersFile);
     const gate = evaluateClickGate({ selector, label, isSubmit, href, rules });
 

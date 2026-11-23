@@ -105,7 +105,12 @@ rl.on("line", (line) => {
   let req;
   try {
     req = JSON.parse(trimmed);
-  } catch {
+  } catch (err) {
+    send({ jsonrpc: "2.0", id: null, error: { code: -32700, message: `Parse error: ${err.message}` } });
+    return;
+  }
+  if (!req || typeof req !== "object" || Array.isArray(req)) {
+    send({ jsonrpc: "2.0", id: null, error: { code: -32600, message: "Invalid Request" } });
     return;
   }
 
@@ -118,7 +123,7 @@ rl.on("line", (line) => {
       result: {
         protocolVersion: "2024-11-05",
         capabilities: { tools: {} },
-        serverInfo: { name: "governed-browser", version: "1.0.0" },
+        serverInfo: { name: "governed-browser", version: "1.0.1" },
       },
     });
     return;
@@ -216,6 +221,15 @@ rl.on("line", (line) => {
       jsonrpc: "2.0",
       id,
       error: { code: -32601, message: `Unknown tool: ${name}` },
+    });
+    return;
+  }
+
+  if (id !== undefined) {
+    send({
+      jsonrpc: "2.0",
+      id,
+      error: { code: -32601, message: `Method not found: ${method}` },
     });
   }
 });

@@ -1,6 +1,6 @@
 {
   "name": "@franco/governed-browser",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Constitutional Commit-Click Brake & Emerald-Border Audit Gate for AI Browser Agents (CLI + MCP Server + Antigravity / Claude Code / Gemini CLI / DSH Plugin)",
   "type": "module",
   "main": "./src/core.mjs",

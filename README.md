@@ -7,7 +7,7 @@
 
 ![governed-browser terminal demo](assets/demo-terminal.svg)
 
-`governed-browser` is the 4th flagship in the open-source Agent Governance suite (alongside [`casebook`](https://github.com/JavierFrancoLeal/casebook), [`dual-brain-guard`](https://github.com/JavierFrancoLeal/dual-brain-guard), and [`autonomy-ladder`](https://github.com/JavierFrancoLeal/autonomy-ladder)). It decouples the constitutional browser safety rails from `jfranco-cockpit-browser` into a **zero-dependency Node.js CLI, stdio MCP Server, and portable plugin** for Playwright, Chrome DevTools Protocol (CDP), Claude Code, Gemini CLI, Cursor, Google Antigravity, and DeepSeek Harness (DSH).
+`governed-browser` is the 4th flagship in the open-source Agent Governance suite (alongside [`casebook`](https://github.com/JavierFrancoLeal/casebook), [`dual-brain-guard`](https://github.com/JavierFrancoLeal/dual-brain-guard), [`autonomy-ladder`](https://github.com/JavierFrancoLeal/autonomy-ladder), and [`forensic-contracts`](https://github.com/JavierFrancoLeal/forensic-contracts)). It decouples the constitutional browser safety rails from `jfranco-cockpit-browser` into a **zero-dependency Node.js CLI, stdio MCP Server, and portable plugin** for Playwright, Chrome DevTools Protocol (CDP), Claude Code, Gemini CLI, Cursor, Google Antigravity, and DeepSeek Harness (DSH).
 
 ---
 
@@ -69,6 +69,23 @@ Exposed MCP tools:
 ## Technical Essay
 
 Read the full engineering postmortem and design rationale in [**Why Browser Agents Need a Hard Commit Brake in Code, Not a Prompt**](docs/ESSAY_THE_AGENT_NEVER_CLICKS_SEND.md).
+
+---
+
+## Open-Source Agent Governance Suite
+
+| Repository | Role | Status |
+| :--- | :--- | :--- |
+| **[`casebook`](https://github.com/JavierFrancoLeal/casebook)** | Bounded-entropy 4-tier constitutional memory, Open Symptoms Radar & 5-to-1 compaction oracle | **`v1.0.1` Live** |
+| **[`dual-brain-guard`](https://github.com/JavierFrancoLeal/dual-brain-guard)** | Harness-agnostic mechanical Proposer != Verifier cross-model guard (`CLI + MCP + hooks`) | **`v1.1.1` Live** |
+| **[`autonomy-ladder`](https://github.com/JavierFrancoLeal/autonomy-ladder)** | Evidence-based Traffic-Light autonomy grader (`🟢 / ⚑ / 🟡 / 🔴` & `A/B/C/D` trust scores) | **`v1.0.2` Live** |
+| **[`governed-browser`](https://github.com/JavierFrancoLeal/governed-browser)** | Constitutional commit-click brake (`🛑 RED` on Send/Pay/Delete) & SHA-256 hash-chained audit trail | **`v1.0.1` Live** |
+| **[`forensic-contracts`](https://github.com/JavierFrancoLeal/forensic-contracts)** | 5-line `@forensic-contract` linter, `@blast-radius` cage enforcer & literal `sourcePin` verifier | **`v1.0.1` Live** |
+| **[`agent-governance`](https://github.com/JavierFrancoLeal/agent-governance)** | Complete 26-plugin DeepSeek Harness governance suite (mother repository) | **`v1.0.0` Live** |
+| **[`best-security-governance-architects`](https://github.com/JavierFrancoLeal/best-security-governance-architects)** | CPU-first pre-merge security & governance suite (`ECOSYSTEM_CONTRACT v1.2.0`) | **`v1.2.0` Live** |
+| **[`best-ui-ux-designers`](https://github.com/JavierFrancoLeal/best-ui-ux-designers)** | Adversarial UI/UX design judgment suite — 12 Barbell design minds & 4 Via Negativa auditors | **`v1.2.0` Live** |
+
+---
 
 ## License
 
