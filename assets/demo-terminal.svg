@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 390" width="860" height="390">
+  <rect width="860" height="390" rx="12" fill="#0f172a"/>
+  <rect width="860" height="36" rx="12" fill="#1e293b"/>
+  <circle cx="22" cy="18" r="6" fill="#ef4444"/>
+  <circle cx="42" cy="18" r="6" fill="#f59e0b"/>
+  <circle cx="62" cy="18" r="6" fill="#10b981"/>
+  <text x="430" y="23" text-anchor="middle" fill="#94a3b8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" font-weight="600">governed-browser — Constitutional Commit-Click Brake (CLI + MCP Gate)</text>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">
+    <text x="24" y="68" fill="#38bdf8">$ governed-browser redact --selector "#card-cvv" --label "CVV" --value "842"</text>
+    <text x="24" y="92" fill="#10b981">⚑ SEMI-AUTOMATIC | fill #card-cvv = "••• (sensitive — never logged)" | Emerald Border #10b981</text>
+
+    <text x="24" y="130" fill="#38bdf8">$ governed-browser check --selector "button.primary" --label "Payer $1,450.00" --submit</text>
+    <text x="24" y="156" fill="#f87171" font-weight="700">🛑 BRAKE (exit 2) — status: "BRAKED" | tier: "RED"</text>
+    <text x="24" y="178" fill="#fca5a5">   reason: "refused — final/legal/committing button (Send / Pay / Submit / Delete / Authorize)"</text>
+    <text x="24" y="200" fill="#e2e8f0">   ✅ Ready: fill #invoice-id = INV-2049 · fill #amount = 1450.00 · click #preview = Preview</text>
+    <text x="24" y="222" fill="#fbbf24">   ⏳ Missing (you, human): final click on "Payer $1,450.00"</text>
+
+    <text x="24" y="260" fill="#38bdf8">$ governed-browser verify-chain --audit ~/.governed-browser/audit.jsonl</text>
+    <text x="24" y="284" fill="#10b981">{ "valid": true, "entries": 4, "brokenAtLine": null, "headHash": "9c74a1e0b8f3..." }</text>
+
+    <text x="24" y="322" fill="#38bdf8">$ governed-browser kpi --audit ~/.governed-browser/audit.jsonl</text>
+    <text x="24" y="346" fill="#a7f3d0">Mutating actions: 4 · Autonomy: 75% (3 autonomous) · Human intervention: 25% (1 RED commit brake)</text>
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+{
+  "name": "governed-browser",
+  "displayName": "Governed Browser",
+  "version": "1.0.0",
+  "description": "Constitutional commit-click brake and SHA-256 hash-chained audit trail for browser-driving AI agents. Physically blocks Send/Pay/Submit/Delete/Authorize clicks so the human performs the final committing click.",
+  "author": {
+    "name": "Javier Franco",
+    "url": "https://github.com/JavierFrancoLeal"
+  },
+  "homepage": "https://github.com/JavierFrancoLeal/governed-browser",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JavierFrancoLeal/governed-browser.git"
+  },
+  "logo": "assets/logo.svg",
+  "suggestedPrompts": [
+    "Check whether this browser button click is allowed under the Governed Browser commit-click brake",
+    "Redact sensitive form fields and record the action in the SHA-256 hash-chained browser audit trail",
+    "Render the two-section Governed Browser Accountability Report and Autonomy Efficiency KPI"
+  ]
+}

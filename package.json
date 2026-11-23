@@ -1,0 +1,33 @@
+{
+  "name": "@franco/governed-browser",
+  "version": "1.0.0",
+  "description": "Constitutional Commit-Click Brake & Emerald-Border Audit Gate for AI Browser Agents (CLI + MCP Server + Antigravity / Claude Code / Gemini CLI / DSH Plugin)",
+  "type": "module",
+  "main": "./src/core.mjs",
+  "bin": {
+    "governed-browser": "./src/cli.mjs",
+    "governed-browser-mcp": "./src/mcp-server.mjs"
+  },
+  "scripts": {
+    "test": "node --test test/governed-browser.test.mjs"
+  },
+  "keywords": [
+    "browser-agent",
+    "ai-safety",
+    "human-in-the-loop",
+    "mcp-server",
+    "playwright",
+    "cdp",
+    "agent-governance",
+    "commit-brake"
+  ],
+  "author": "Javier Franco Leal",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JavierFrancoLeal/governed-browser.git"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
